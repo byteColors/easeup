@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "3833295133",
+    "project_id": "easeup-on",
+    "storage_bucket": "easeup-on.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:3833295133:android:720b619b22f2ea49de31f4",
+        "android_client_info": {
+          "package_name": "com.example.easeup"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOhWKV2QqG1f3KWGEISCodEFV_RWPxhW4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,5 +1,7 @@
 // Defining routes centrally
 
+import 'package:easeup/core/navigation/routes.dart';
+import 'package:easeup/core/navigation/routes_name.dart';
 import 'package:flutter/material.dart';
 import 'modules/authentication/auth_module.dart';
 import 'modules/dashboard/dashboard_module.dart';
@@ -13,16 +15,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      initialRoute: '/login',
-      routes: {
-        '/login': (context) => const AuthModule(),
-        '/dashboard': (context) => const DashboardModule(),
-        '/eforms': (context) => const EFormsModule(),
-        '/messaging': (context) => const MessagingModule(),
-        '/payments': (context) => const PaymentsModule(),
-        '/receipts': (context) => const ReceiptsModule(),
-      },
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: "easeup app",
+      initialRoute: RoutesName.login,
+      onGenerateRoute: Routes.generateRoute,
     );
   }
 }

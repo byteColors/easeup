@@ -10,8 +10,11 @@ class AuthModule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(providers: [
-      ChangeNotifierProvider(create: (_) => LoginViewModel()),
-    ]);
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => LoginViewModel()),
+      ],
+      child: const LoginScreen(),
+    );
   }
 }

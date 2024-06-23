@@ -1,5 +1,7 @@
 class RoutesName {
   static const String login = 'login_screen';
+  static const String register = 'register_screen';
+  static const String forgotPassword = 'forgot_password_screen';
   static const String dashboard = 'dashboard_screen';
   static const String eforms = 'eforms_screen';
   static const String messaging = 'messaging_screen';

@@ -1,16 +1,17 @@
 import 'package:easeup/core/navigation/routes_name.dart';
 import 'package:easeup/modules/authentication/viewmodels/authentication_viewmodel.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController emailTextController = TextEditingController();
   TextEditingController passwordTextController = TextEditingController();
 
@@ -27,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Login Failed'),
+        title: const Text('Registration Failed'),
         content: Text(message),
         actions: [
           TextButton(
@@ -97,26 +98,38 @@ class _LoginScreenState extends State<LoginScreen> {
                               listen: false,
                             );
 
-                            final success =
-                                await viewmodel.loginWithEmailAndPassword(
-                              email,
-                              password,
-                            );
-
-                            if (success) {
+                            try {
+                              final success =
+                                  await viewmodel.registerWithEmailAndPassword(
+                                email,
+                                password,
+                              );
                               if (!context.mounted) return;
-                              Navigator.pushNamed(
-                                  context, RoutesName.dashboard);
-                            } else {
+                              if (success) {
+                                Navigator.pushNamed(
+                                  context,
+                                  RoutesName.login,
+                                );
+                              } else {
+                                _showErrorDialog(
+                                  context,
+                                  viewmodel.errorMessage,
+                                );
+                              }
+                            } catch (e) {
+                              // Handle exception (e.g., log it or show a dialog)
+                              if (kDebugMode) {
+                                print('Error: $e');
+                              }
                               if (!context.mounted) return;
                               _showErrorDialog(
                                 context,
-                                viewmodel.errorMessage,
+                                'An unexpected error occurred. Please try again.',
                               );
                             }
                           }
                         },
-                        child: const Text('Login'),
+                        child: const Text('Register'),
                       ),
                     ),
                     Row(
@@ -126,11 +139,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           onTap: () {
                             Navigator.pushNamed(
                               context,
-                              RoutesName.register,
+                              RoutesName.login,
                             );
                           },
                           child: const Text(
-                            'New here? Please Register',
+                            'Already registered? Please Login',
                             style: TextStyle(),
                           ),
                         ),
@@ -148,20 +161,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          final viewModel =
-                              Provider.of<AuthenticationViewModel>(
-                            context,
-                            listen: false,
-                          );
-                          viewModel.readFirestoreData();
-                        },
-                        child: const Text('Check Firebase'),
-                      ),
                     ),
                   ],
                 )),

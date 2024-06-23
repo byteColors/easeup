@@ -83,4 +83,5 @@ class DefaultFirebaseOptions {
     authDomain: 'easeup-on.firebaseapp.com',
     storageBucket: 'easeup-on.appspot.com',
   );
+
 }

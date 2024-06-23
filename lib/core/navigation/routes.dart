@@ -1,5 +1,7 @@
 import 'package:easeup/core/navigation/routes_name.dart';
+import 'package:easeup/modules/authentication/views/forgot_password_screen.dart';
 import 'package:easeup/modules/authentication/views/login_screen.dart';
+import 'package:easeup/modules/authentication/views/register_screen.dart';
 import 'package:easeup/modules/dashboard/views/dashboard_screen.dart';
 import 'package:easeup/modules/eforms/views/eforms_screen.dart';
 import 'package:easeup/modules/messaging/views/messaging_screen.dart';
@@ -13,6 +15,14 @@ class Routes {
       case RoutesName.login:
         return MaterialPageRoute(
           builder: (context) => const LoginScreen(),
+        );
+      case RoutesName.register:
+        return MaterialPageRoute(
+          builder: (context) => const RegisterScreen(),
+        );
+      case RoutesName.forgotPassword:
+        return MaterialPageRoute(
+          builder: (context) => const ForgotPasswordScreen(),
         );
       case RoutesName.dashboard:
         return MaterialPageRoute(

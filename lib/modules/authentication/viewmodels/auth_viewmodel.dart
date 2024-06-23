@@ -15,6 +15,7 @@ class AuthenticationViewModel extends ChangeNotifier {
   String get errorMessage => _errorMessage;
 
   final FirebaseAuth _fbAuth = FirebaseAuth.instance;
+final FirebaseAuthRepository _fbAuthRepo = FirebaseAuthRepository();
 
   // Constructor: ensures that the ViewModel listening to
   //  auth state changes immediately upon creation.

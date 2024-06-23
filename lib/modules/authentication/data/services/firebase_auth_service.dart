@@ -15,12 +15,12 @@ class FirebaseAuthService {
   }
 
   Future<UserCredential> signInUser(String email, String password) async {
-    return await FirebaseAuth.instance
+    return await _auth
         .signInWithEmailAndPassword(email: email, password: password);
   }
 
   Future<void> signOutUser() async {
-    await FirebaseAuth.instance.signOut();
+    await _auth.signOut();
   }
 
 //

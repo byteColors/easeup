@@ -14,7 +14,7 @@ class AuthenticationViewModel extends ChangeNotifier {
   User? get currentUser => _currentUser;
   String get errorMessage => _errorMessage;
 
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseAuth _fbAuth = FirebaseAuth.instance;
 
   // Constructor: ensures that the ViewModel listening to
   //  auth state changes immediately upon creation.
@@ -26,7 +26,7 @@ class AuthenticationViewModel extends ChangeNotifier {
 
   // Method: Initialize the auth state
   void _initializeAuthState() {
-    _firebaseAuth.authStateChanges().listen(
+    _fbAuth.authStateChanges().listen(
       (User? user) {
         _currentUser = user;
         _isLoading = false;
@@ -36,19 +36,19 @@ class AuthenticationViewModel extends ChangeNotifier {
   }
 
   Future<void> checkCurrentUser() async {
-    _currentUser = _firebaseAuth.currentUser;
+    _currentUser = _fbAuth.currentUser;
     _isLoading = false;
     notifyListeners();
   }
 
   // Method: Register with email & password
-  Future<bool> registerWithEmailAndPassword(
+  Future<bool> regusterNewUser(
     String email,
     String password,
   ) async {
     _setLoading(true);
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(
+      await _fbAuth.createUser(
         email: email,
         password: password,
       );
@@ -66,13 +66,13 @@ class AuthenticationViewModel extends ChangeNotifier {
 
   // Method: Login with email and password
 
-  Future<bool> loginWithEmailAndPassword(
+  Future<bool> loginUser(
     String email,
     String password,
   ) async {
     _setLoading(true);
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(
+      await _fbAuth.loginUser(
         email: email,
         password: password,
       );
@@ -92,7 +92,7 @@ class AuthenticationViewModel extends ChangeNotifier {
   Future<bool> resetPassword(String email) async {
     _setLoading(true);
     try {
-      await _firebaseAuth.sendPasswordResetEmail(email: email);
+      await _fbAuth.sendPasswordResetEmail(email: email);
       _errorMessage = '';
       _setLoading(false);
       return true;
@@ -104,7 +104,7 @@ class AuthenticationViewModel extends ChangeNotifier {
 
   // Method: Logout
   Future<void> logout() async {
-    await _firebaseAuth.signOut();
+    await _fbAuth.signOut();
     _currentUser = null;
     notifyListeners();
   }

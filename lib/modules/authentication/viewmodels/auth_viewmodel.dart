@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class AuthenticationViewModel extends ChangeNotifier {
+class AuthViewModel extends ChangeNotifier {
   // Private Properties (data available locally)
   bool _isLoading = true;
   User? _currentUser;
@@ -18,7 +18,7 @@ class AuthenticationViewModel extends ChangeNotifier {
 
   // Constructor: ensures that the ViewModel listening to
   //  auth state changes immediately upon creation.
-  AuthenticationViewModel() {
+  AuthViewModel() {
     // Initialize the auth state
     _initializeAuthState();
     checkCurrentUser();
@@ -42,7 +42,7 @@ class AuthenticationViewModel extends ChangeNotifier {
   }
 
   // Method: Register with email & password
-  Future<bool> regusterNewUser(
+  Future<bool> registerNewUser(
     String email,
     String password,
   ) async {

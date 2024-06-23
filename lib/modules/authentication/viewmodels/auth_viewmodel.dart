@@ -14,8 +14,7 @@ class AuthenticationViewModel extends ChangeNotifier {
   User? get currentUser => _currentUser;
   String get errorMessage => _errorMessage;
 
-  final FirebaseAuth _fbAuth = FirebaseAuth.instance;
-final FirebaseAuthRepository _fbAuthRepo = FirebaseAuthRepository();
+	final FirebaseAuthRepository _fbAuthRepo = FirebaseAuthRepository();
 
   // Constructor: ensures that the ViewModel listening to
   //  auth state changes immediately upon creation.
@@ -27,7 +26,7 @@ final FirebaseAuthRepository _fbAuthRepo = FirebaseAuthRepository();
 
   // Method: Initialize the auth state
   void _initializeAuthState() {
-    _fbAuth.authStateChanges().listen(
+    _fbAuthRepo.authStateChanges().listen(
       (User? user) {
         _currentUser = user;
         _isLoading = false;
@@ -37,7 +36,7 @@ final FirebaseAuthRepository _fbAuthRepo = FirebaseAuthRepository();
   }
 
   Future<void> checkCurrentUser() async {
-    _currentUser = _fbAuth.currentUser;
+    _currentUser = _fbAuthRepo.currentUser;
     _isLoading = false;
     notifyListeners();
   }
@@ -49,7 +48,7 @@ final FirebaseAuthRepository _fbAuthRepo = FirebaseAuthRepository();
   ) async {
     _setLoading(true);
     try {
-      await _fbAuth.createUser(
+      await _fbAuthRepo.createUser(
         email: email,
         password: password,
       );
@@ -73,7 +72,7 @@ final FirebaseAuthRepository _fbAuthRepo = FirebaseAuthRepository();
   ) async {
     _setLoading(true);
     try {
-      await _fbAuth.loginUser(
+      await _fbAuthRepo.loginUser(
         email: email,
         password: password,
       );
@@ -93,7 +92,7 @@ final FirebaseAuthRepository _fbAuthRepo = FirebaseAuthRepository();
   Future<bool> resetPassword(String email) async {
     _setLoading(true);
     try {
-      await _fbAuth.sendPasswordResetEmail(email: email);
+      await _fbAuthRepo.sendPasswordResetEmail(email: email);
       _errorMessage = '';
       _setLoading(false);
       return true;
@@ -105,7 +104,7 @@ final FirebaseAuthRepository _fbAuthRepo = FirebaseAuthRepository();
 
   // Method: Logout
   Future<void> logout() async {
-    await _fbAuth.signOut();
+    await _fbAuthRepo.signOut();
     _currentUser = null;
     notifyListeners();
   }

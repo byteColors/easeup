@@ -1,10 +1,8 @@
-// ignore_for_file: unused_import
-
 import 'package:easeup/core/navigation/routes_name.dart';
+import 'package:easeup/modules/authentication/viewmodels/authentication_viewmodel.dart';
 import 'package:easeup/modules/dashboard/views/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'views/login_screen.dart';
-import 'viewmodels/authentication_viewmodel.dart';
 import 'package:provider/provider.dart';
 
 class AuthModule extends StatelessWidget {
@@ -31,10 +29,7 @@ class AuthModule extends StatelessWidget {
           if (!context.mounted) {
             return Container(); // Or an empty widget to avoid navigation issues
           }
-          // // Check for logged-in user
-          // if (authViewModel.currentUser == null) {
-          //   return const LoginScreen();
-          // }
+
           // Navigation Delegate Approach
           return Navigator(
             initialRoute: authViewModel.currentUser == null

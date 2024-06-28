@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easeup/modules/authentication/data/repositories/firebase_auth_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class AuthenticationViewModel extends ChangeNotifier {
+  final FirebaseAuthRepository _fbAuthRepo = FirebaseAuthRepository();
+
   // Private Properties (data available locally)
-  bool _isLoading = true;
   User? _currentUser;
+  bool _isLoading = true;
   String _errorMessage = '';
 
   // Getters (Private properties data exposed to the View)
@@ -14,19 +17,30 @@ class AuthenticationViewModel extends ChangeNotifier {
   User? get currentUser => _currentUser;
   String get errorMessage => _errorMessage;
 
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-
   // Constructor: ensures that the ViewModel listening to
   //  auth state changes immediately upon creation.
   AuthenticationViewModel() {
     // Initialize the auth state
     _initializeAuthState();
-    checkCurrentUser();
   }
 
   // Method: Initialize the auth state
-  void _initializeAuthState() {
-    _firebaseAuth.authStateChanges().listen(
+  void _initializeAuthState() async {
+    // Set _isLoading initially and handle session restoration delay
+    _isLoading = _currentUser == null;
+    notifyListeners();
+
+    // Check current user after a short delay to ensure session restoration
+    Future.delayed(const Duration(seconds: 500), () {
+      _currentUser = FirebaseAuth.instance.currentUser;
+      if (_currentUser != null) {
+        _isLoading = false;
+        notifyListeners();
+      }
+    });
+
+    // Listen to auth state changes for ongoing updates
+    _fbAuthRepo.checkAuthStatus().listen(
       (User? user) {
         _currentUser = user;
         _isLoading = false;
@@ -35,23 +49,18 @@ class AuthenticationViewModel extends ChangeNotifier {
     );
   }
 
-  Future<void> checkCurrentUser() async {
-    _currentUser = _firebaseAuth.currentUser;
-    _isLoading = false;
-    notifyListeners();
-  }
-
   // Method: Register with email & password
-  Future<bool> registerWithEmailAndPassword(
+  Future<bool> registerNewUser(
     String email,
     String password,
   ) async {
     _setLoading(true);
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(
+      await _fbAuthRepo.registerUser(
         email: email,
         password: password,
       );
+      _currentUser = FirebaseAuth.instance.currentUser; // Cache current user
       _setLoading(false);
       return true;
     } on FirebaseAuthException catch (e) {
@@ -66,16 +75,17 @@ class AuthenticationViewModel extends ChangeNotifier {
 
   // Method: Login with email and password
 
-  Future<bool> loginWithEmailAndPassword(
+  Future<bool> loginUser(
     String email,
     String password,
   ) async {
     _setLoading(true);
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(
+      await _fbAuthRepo.loginUser(
         email: email,
         password: password,
       );
+      _currentUser = FirebaseAuth.instance.currentUser; // Cache current user
       _setLoading(false);
       return true;
     } on FirebaseAuthException catch (e) {
@@ -88,11 +98,18 @@ class AuthenticationViewModel extends ChangeNotifier {
     }
   }
 
+  // Method: Logout
+  Future<void> logout() async {
+    await _fbAuthRepo.logoutUser();
+    _currentUser = null;
+    notifyListeners();
+  }
+
   // Method: Reset password
   Future<bool> resetPassword(String email) async {
     _setLoading(true);
     try {
-      await _firebaseAuth.sendPasswordResetEmail(email: email);
+      await _fbAuthRepo.resetPassword(email: email);
       _errorMessage = '';
       _setLoading(false);
       return true;
@@ -100,13 +117,6 @@ class AuthenticationViewModel extends ChangeNotifier {
       _handleError(e);
       return false;
     }
-  }
-
-  // Method: Logout
-  Future<void> logout() async {
-    await _firebaseAuth.signOut();
-    _currentUser = null;
-    notifyListeners();
   }
 
   // Helper method: Set loading state

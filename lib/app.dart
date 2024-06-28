@@ -1,6 +1,5 @@
 // Defining routes centrally
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easeup/core/navigation/routes.dart';
 import 'package:easeup/core/navigation/routes_name.dart';
 import 'package:flutter/material.dart';

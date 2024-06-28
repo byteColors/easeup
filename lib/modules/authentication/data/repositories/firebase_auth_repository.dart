@@ -8,17 +8,31 @@ class FirebaseAuthRepository {
     return _fbAuthService.checkAuthState();
   }
 
-	Future registerUser(String email, String password){
-		return _fbAuthService.createUser(email, password);
-} 
+  Future registerUser({
+    required String email,
+    required String password,
+  }) {
+    return _fbAuthService.createUser(email, password);
+  }
 
-  Future loginUser(String email, String password) async {
+  Future loginUser({
+    required String email,
+    required String password,
+  }) async {
     return _fbAuthService.signInUser(email, password);
   }
 
-	void logoutUser(){
-		return _fbAuthService.signOutUser();
-}
+  Future<void> logoutUser() {
+    return _fbAuthService.signOutUser();
+  }
+
+  Future<void> resetPassword({
+    required String email,
+  }) async {
+    return _fbAuthService.resetPassword(
+      email: email,
+    );
+  }
 
 // END
 }

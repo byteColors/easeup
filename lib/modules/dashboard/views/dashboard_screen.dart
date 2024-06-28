@@ -13,51 +13,60 @@ class DashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final viewModel = Provider.of<AuthenticationViewModel>(context);
 
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size(double.infinity, 60),
-        child: AppBar(
-          title: const Text('easeup dashboard'),
-          centerTitle: true,
-          automaticallyImplyLeading: false,
-          actions: [
-            IconButton.outlined(
-              onPressed: () {
-                final viewModel = Provider.of<AuthenticationViewModel>(
-                  context,
-                  listen: false,
-                );
-                viewModel.logout();
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: const Size(double.infinity, 60),
+          child: AppBar(
+            title: const Text('dashboard'),
+            centerTitle: true,
+            automaticallyImplyLeading: false,
+            actions: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: IconButton.outlined(
+                  onPressed: () {
+                    final viewModel = Provider.of<AuthenticationViewModel>(
+                      context,
+                      listen: false,
+                    );
+                    viewModel.logout();
 
-                if (true) {
-                  if (!context.mounted) return;
-                  Navigator.pushNamed(context, RoutesName.login);
-                }
-              },
-              icon: const Icon(
-                Icons.logout_outlined,
+                    if (true) {
+                      if (!context.mounted) return;
+                      Navigator.pushNamed(context, RoutesName.login);
+                    }
+                  },
+                  icon: const Icon(
+                    Icons.logout_outlined,
+                  ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-      body: SizedBox(
-        width: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              // TODO: Implement Exception if currentUser is Null
-              'Welcome \n${viewModel.currentUser!.email.toString()} \nease up!',
-              style: const TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.w400,
+        body: viewModel.isLoading
+            ? const CircularProgressIndicator()
+            : SizedBox(
+                width: double.infinity,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      viewModel.currentUser != null
+                          ? 'Welcome \n${viewModel.currentUser!.email.toString()} \nease up!'
+                          : 'Welcome \nGuest \nease up!',
+                      style: const TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const Text('Xplore More...'),
+                  ],
+                ),
               ),
-              textAlign: TextAlign.center,
-            ),
-            const Text('Xplore More...'),
-          ],
-        ),
       ),
     );
   }

@@ -6,11 +6,13 @@ class PasswordField extends StatefulWidget {
     required this.controller,
     required this.hintText,
     this.validator,
+    required this.textInputAction,
   });
 
   final TextEditingController controller;
   final String hintText;
   final FormFieldValidator<String>? validator;
+  final TextInputAction textInputAction;
 
   @override
   State<PasswordField> createState() => _PasswordFieldState();
@@ -35,7 +37,7 @@ class _PasswordFieldState extends State<PasswordField> {
       obscureText: _obscureText ? true : false,
       obscuringCharacter: '*',
       keyboardType: TextInputType.visiblePassword,
-      textInputAction: TextInputAction.done,
+      textInputAction: widget.textInputAction,
       autofillHints: const [AutofillHints.newPassword],
       validator: widget.validator,
     );

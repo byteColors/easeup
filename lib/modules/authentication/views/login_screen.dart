@@ -91,6 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         controller: passwordTextController,
                         hintText: 'password',
                         validator: passwordValidators,
+                        textInputAction: TextInputAction.done,
                       ),
                       // TextFormField(
                       //   controller: passwordTextController,

@@ -1,4 +1,8 @@
 import 'package:easeup/core/navigation/routes_name.dart';
+import 'package:easeup/core/utils/validators/email_validators.dart';
+import 'package:easeup/core/utils/validators/password_validators.dart';
+import 'package:easeup/core/widgets/email_field.dart';
+import 'package:easeup/core/widgets/password_field.dart';
 import 'package:easeup/modules/authentication/viewmodels/authentication_viewmodel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +19,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController emailTextController = TextEditingController();
   TextEditingController passwordTextController = TextEditingController();
+  TextEditingController confirmPasswordTextController = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -67,36 +72,53 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   key: _formKey,
                   child: Column(
                     children: [
-                      TextFormField(
+                      EmailField(
                         controller: emailTextController,
-                        decoration: const InputDecoration(
-                          hintText: 'Enter your email',
-                        ),
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter some text';
-                          }
-                          return null;
-                        },
+                        hintText: 'Enter you email',
+                        validator: emailValidators,
                       ),
-                      TextFormField(
+                      // TextFormField(
+                      //   controller: emailTextController,
+                      //   decoration: const InputDecoration(
+                      //     hintText: 'Enter your email',
+                      //   ),
+                      //   keyboardType: TextInputType.emailAddress,
+                      //   validator: (value) {
+                      //     if (value == null || value.isEmpty) {
+                      //       return 'Please enter some text';
+                      //     }
+                      //     return null;
+                      //   },
+                      // ),
+                      PasswordField(
                         controller: passwordTextController,
-                        decoration: const InputDecoration(
-                          hintText: 'password',
-                        ),
-                        obscureText: true,
-                        obscuringCharacter: '*',
-                        keyboardType: TextInputType.visiblePassword,
-                        textInputAction: TextInputAction.done,
-                        autofillHints: const [AutofillHints.newPassword],
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter some text';
-                          }
-                          return null;
-                        },
+                        hintText: 'Enter password',
+                        validator: passwordValidators,
+                        textInputAction: TextInputAction.next,
                       ),
+                      PasswordField(
+                        controller: confirmPasswordTextController,
+                        hintText: 'Confirm password',
+                        validator: passwordValidators,
+                        textInputAction: TextInputAction.done,
+                      ),
+                      // TextFormField(
+                      //   controller: passwordTextController,
+                      //   decoration: const InputDecoration(
+                      //     hintText: 'password',
+                      //   ),
+                      //   obscureText: true,
+                      //   obscuringCharacter: '*',
+                      //   keyboardType: TextInputType.visiblePassword,
+                      //   textInputAction: TextInputAction.done,
+                      //   autofillHints: const [AutofillHints.newPassword],
+                      //   validator: (value) {
+                      //     if (value == null || value.isEmpty) {
+                      //       return 'Please enter some text';
+                      //     }
+                      //     return null;
+                      //   },
+                      // ),
                       Padding(
                         padding: const EdgeInsets.all(16),
                         child: ElevatedButton(
